@@ -7,6 +7,11 @@ android {
     namespace = "com.example.nyanshop"
     compileSdk = 34
 
+    // biar bisa get semua id yang ada di xml
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.example.nyanshop"
         minSdk = 33
