@@ -70,6 +70,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "item.db", nu
         db.close()
     }
 
+    fun deleteAllItem() {
+        val db = writableDatabase
+        db.delete("item", null, null)
+        db.close()
+    }
+
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         db?.execSQL("DROP TABLE IF EXISTS item")
         onCreate(db)

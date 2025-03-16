@@ -1,6 +1,7 @@
 package com.example.nyanshop
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -75,9 +76,18 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_profile -> Toast.makeText(this, "Profile Menu clicked", Toast.LENGTH_SHORT).show()
-            R.id.menu_log_out -> Toast.makeText(this, "Log Out Menu clicked", Toast.LENGTH_SHORT).show()
+            R.id.menu_sms -> {
+                val intent = Intent(this, SmsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.menu_map -> {
+                val intent = Intent(this, MapActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.menu_profile -> Toast.makeText(this, "Profile menu clicked", Toast.LENGTH_SHORT).show()
+            R.id.menu_log_out -> Toast.makeText(this, "Log Out menu clicked", Toast.LENGTH_SHORT).show()
         }
+
         return super.onOptionsItemSelected(item)
     }
 }

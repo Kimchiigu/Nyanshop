@@ -20,6 +20,16 @@
         android:layout_height="10dp"
         />
 
+    <Button
+        android:id="@+id/btn_get_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Data" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="10dp" />
+
     <EditText
         android:id="@+id/et_item_id"
         android:layout_width="match_parent"
@@ -94,7 +104,7 @@
             android:layout_row="0"
             android:layout_column="2"
             android:layout_columnWeight="1"
-            android:text="delete"
+            android:text="Delete"
             />
 
     </GridLayout>
