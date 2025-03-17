@@ -37,8 +37,7 @@ class ItemFragment : Fragment() {
         setUpRecycler()
 
         binding.btnGetData.setOnClickListener {
-//            masukin link generated dari npoint.io yang kita simpan jsonnya
-            val url = "https://api.npoint.io/fdc3e8641845a1a6bef6"
+            val url = "https://api.npoint.io/54d1f95bddbcb0670225"
             val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
                 try {
                     databaseHelper.deleteAllItem()

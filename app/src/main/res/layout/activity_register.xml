@@ -1,145 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="20dp">
+    android:background="@color/white"
+    tools:context=".RegisterActivity">
 
-    <TextView
-        android:id="@+id/tv_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:textStyle="bold"
-        android:textSize="25sp"
-        />
-    
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="10dp"
-        />
-    
-    <EditText
-        android:id="@+id/et_username"
+    <!-- Blue Gradient Header -->
+    <View
+        android:id="@+id/header_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Username"
-        android:autofillHints="username"
-        android:inputType="text"
-        />
-
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="10dp"
-        />
-
-    <EditText
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:autofillHints="password"
-        android:inputType="textPassword"
-        />
-
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="10dp"
-        />
-
-    <RadioGroup
-        android:id="@+id/rg_gender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/rb_male"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Male"
-            />
-
-        <Space
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            />
-
-        <RadioButton
-            android:id="@+id/rb_female"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Female"
-            />
-
-    </RadioGroup>
-
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="10dp"
-        />
+        android:layout_height="0dp"
+        android:background="@drawable/blue_gradient_background"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/header_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Switch
-            android:id="@+id/sw_admin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/header_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tv_admin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Admin"
-            />
+            android:text="@string/nyanshop_login_title"
+            android:textColor="@color/white"
+            android:textSize="48sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nyanshop_login_description"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="10dp"
-        />
-
-    <CheckBox
-        android:id="@+id/cb_tnc"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="I agree to terms and conditions"
-        />
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="-20dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_background">
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="10dp"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
 
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        app:cornerRadius="5dp"
-        />
+            <TextView
+                android:id="@+id/tv_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="SIGN UP"
+                android:textAlignment="center"
+                android:textColor="@color/blue_primary"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="10dp"
-        />
+            <!-- Name Field -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Name"
+                android:textColor="@color/blue_primary"
+                android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/tv_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Already have an account? Login here!"
-        android:textAlignment="center"
-        />
+            <EditText
+                android:id="@+id/et_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="name"
+                android:background="@null"
+                android:hint="Enter your full name"
+                android:inputType="textPersonName"
+                android:paddingBottom="8dp"
+                android:textSize="16sp" />
 
-</LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/blue_primary" />
+
+            <!-- Email Field -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Email"
+                android:textColor="@color/blue_primary"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="emailAddress"
+                android:background="@null"
+                android:hint="example@email.com"
+                android:inputType="textEmailAddress"
+                android:paddingBottom="8dp"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/blue_primary" />
+
+            <!-- Password Field -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Password"
+                android:textColor="@color/blue_primary"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="password"
+                android:background="@null"
+                android:hint="Create a password"
+                android:inputType="textPassword"
+                android:paddingBottom="8dp"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/blue_primary" />
+
+            <!-- Gender Field -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Gender"
+                android:textColor="@color/blue_primary"
+                android:textSize="14sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:buttonTint="@color/blue_primary"
+                    android:text="Male"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/blue_primary"
+                    android:text="Female"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </RadioGroup>
+
+            <!-- Admin Switch -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_admin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Admin Account"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <Switch
+                    android:id="@+id/sw_admin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:thumbTint="@color/blue_primary"
+                    android:trackTint="@color/blue_light" />
+            </LinearLayout>
+
+            <!-- Terms and Conditions -->
+            <CheckBox
+                android:id="@+id/cb_tnc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:buttonTint="@color/blue_primary"
+                android:text="I agree to the Terms and Conditions"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <!-- Register Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/blue_gradient_button"
+                android:text="SIGN UP"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <!-- Login Link -->
+            <TextView
+                android:id="@+id/tv_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Already have an account? Login here"
+                android:textAlignment="center"
+                android:textColor="@color/blue_primary"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

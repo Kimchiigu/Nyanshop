@@ -7,62 +7,69 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.nyanshop.database.DatabaseHelper
 
 class MainActivity : AppCompatActivity() {
-
-    // lateinit ini variabelnya akan dinisialisasi nanti (karena kan kita nunggu inputan user)
-    private lateinit var etUsername: EditText
+    private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
     private lateinit var tvRegister: TextView
+    private lateinit var db: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
-        // R ini adalah Resources, bisa akses folder/file di directory kita
-        etUsername = findViewById(R.id.et_username)
+        etEmail = findViewById(R.id.et_email)
         etPassword = findViewById(R.id.et_password)
         btnLogin = findViewById(R.id.btn_login)
         tvRegister = findViewById(R.id.tv_register)
 
-        btnLogin.setOnClickListener {
-            val username = etUsername.text
-            val password = etPassword.text
+        db = DatabaseHelper(this)
 
-            if (username.isEmpty() || password.isEmpty()) {
-                // context = mau taruh mana toast nya
-                //           kalau this berarti taruh disini (MainACtivity.kt)
-                // char sequence = isi toast
-                // duration = berapa lama mau ditampilin
-                // return nya itu type functionnya
-                Toast.makeText(this, "Username or Password can't be empty!", Toast.LENGTH_SHORT).show()
+        btnLogin.setOnClickListener {
+            val email = etEmail.text.toString().trim()
+            val password = etPassword.text.toString().trim()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                showToast("Email or Password can't be empty!")
                 return@setOnClickListener
             }
 
-            Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
-            Log.i("LOGIN_USERNAME", username.toString())
-            Log.i("LOGIN_PASSWORD", password.toString())
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.putExtra("username", username.toString())
-            startActivity(intent)
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                showToast("Invalid email format!")
+                return@setOnClickListener
+            }
+
+            if (password.length <= 5) {
+                showToast("Password must be more than 5 characters!")
+                return@setOnClickListener
+            }
+
+            val user = db.checkUserLogin(email, password)
+            if (user != null) {
+                showToast("Login Successful!")
+
+                Log.i("LOGIN_EMAIL", email)
+                Log.i("LOGIN_PASSWORD", password)
+
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.putExtra("username", user.name)
+                startActivity(intent)
+                finish()
+            } else {
+                showToast("Invalid email or password!")
+            }
         }
 
         tvRegister.setOnClickListener {
-            // Intent = ketika mau pindah halaman
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }
