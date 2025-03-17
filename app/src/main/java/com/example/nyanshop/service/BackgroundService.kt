@@ -12,7 +12,6 @@ class BackgroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-//        return super.onStartCommand(intent, flags, startId)
         Thread {
             for (i in 1..5) {
                 Log.d("BackgroundService", "Running Operation $i")
@@ -21,14 +20,10 @@ class BackgroundService : Service() {
             stopSelf()
         }.start()
 
-// threadnya bakal diulang kalau ada yang mau stop threadnya secara paksa
         return START_STICKY
     }
 
     override fun onBind(p0: Intent?): IBinder? {
-//        misalnya kita punya 2 service yang berjalan berbarengan,
-//        terus mau komunikasi pakenya intent
-//        tapi krn kita gk sekompleks itu, kita bisa cuekin dulu
         TODO("Not yet implemented")
     }
 

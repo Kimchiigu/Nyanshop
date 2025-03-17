@@ -5,17 +5,21 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.nyanshop.fragment.ItemFragment
 import com.example.nyanshop.fragment.ReviewFragment
+import com.example.nyanshop.fragments.HomeFragment
+import com.example.nyanshop.fragments.PetFragment
+import com.example.nyanshop.fragments.ProfileFragment
 
 class TabHomeVPAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
     override fun getItemCount(): Int {
-        return 2
+        return 3
     }
 
     override fun createFragment(position: Int): Fragment {
         return when(position) {
-            0 -> ItemFragment()
-            1 -> ReviewFragment()
-            else -> ItemFragment()
+            0 -> HomeFragment()
+            1 -> PetFragment()
+            2 -> ProfileFragment()
+            else -> HomeFragment()
         }
     }
 
