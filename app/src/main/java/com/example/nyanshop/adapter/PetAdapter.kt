@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nyanshop.MainActivity
+import com.example.nyanshop.MapActivity
 import com.example.nyanshop.databinding.PetCardBinding
 import com.example.nyanshop.model.Pet
 
@@ -27,13 +28,17 @@ class PetAdapter(private val context: Context, private val petList: List<Pet>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pet = petList[position]
-
         holder.binding.tvPetName.text = pet.petName
         holder.binding.tvPetType.text = pet.petType
-        holder.binding.tvPetPrice.text = pet.petPrice.toString()
+        holder.binding.tvPetPrice.text = "$${pet.petPrice}"
 
-        holder.binding.cvPetCard.setOnClickListener {
-            val intent = Intent(context, MainActivity::class.java)
+        holder.binding.btnBuyPet.setOnClickListener {
+            val intent = Intent(context, MapActivity::class.java).apply {
+                putExtra("PET_ID", pet.petId)
+                putExtra("STORE_ID", pet.storeId)
+                putExtra("ITEM_NAME", pet.petName)
+                putExtra("ITEM_PRICE", pet.petPrice.toString())
+            }
             context.startActivity(intent)
         }
     }

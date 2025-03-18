@@ -77,6 +77,24 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
         return result != -1L
     }
 
+    fun getStore(storeId: String): Store? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM store WHERE storeId = ?", arrayOf(storeId))
+
+        var store: Store? = null
+        if (cursor.moveToFirst()) {
+            store = Store(
+                cursor.getString(cursor.getColumnIndexOrThrow("store_id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("store_name")),
+                cursor.getString(cursor.getColumnIndexOrThrow("store_location"))
+            )
+        }
+
+        cursor.close()
+        db.close()
+        return store
+    }
+
     fun getStores(): List<Store> {
         val stores = mutableListOf<Store>()
         val db = readableDatabase
@@ -166,7 +184,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
 
     fun deleteAllPets() {
         val db = writableDatabase
-        db.delete("pets", null, null)
+        db.delete("pet", null, null)
         db.close()
     }
 

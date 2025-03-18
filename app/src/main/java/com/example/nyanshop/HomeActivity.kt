@@ -1,11 +1,12 @@
 package com.example.nyanshop
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.nyanshop.adapter.TabHomeVPAdapter
+import com.example.nyanshop.database.DatabaseHelper
+import com.example.nyanshop.model.User
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -13,6 +14,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
     private lateinit var tvHello: TextView
+    private lateinit var db: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +24,21 @@ class HomeActivity : AppCompatActivity() {
         tabLayout = findViewById(R.id.tab_layout)
         tvHello = findViewById(R.id.tv_hello)
 
-        val username = intent.getStringExtra("username") ?: "User"
-        tvHello.text = "Hello, $username"
+        db = DatabaseHelper(this)
+
+        val email = intent.getStringExtra("email")
+
+        if (email != null) {
+            val user: User? = db.getUserByEmail(email)
+
+            if (user != null) {
+                tvHello.text = user.name
+            } else {
+                tvHello.text = "Guest"
+            }
+        } else {
+            tvHello.text = "Guest"
+        }
 
         val adapter = TabHomeVPAdapter(this)
         viewPager.adapter = adapter

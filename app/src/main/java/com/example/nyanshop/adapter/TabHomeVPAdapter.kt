@@ -3,8 +3,6 @@ package com.example.nyanshop.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.nyanshop.fragment.ItemFragment
-import com.example.nyanshop.fragment.ReviewFragment
 import com.example.nyanshop.fragments.HomeFragment
 import com.example.nyanshop.fragments.PetFragment
 import com.example.nyanshop.fragments.ProfileFragment

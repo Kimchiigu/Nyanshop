@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i("LOGIN_PASSWORD", password)
 
                 val intent = Intent(this, HomeActivity::class.java)
-                intent.putExtra("username", user.name)
+                intent.putExtra("email", user.email)
                 startActivity(intent)
                 finish()
             } else {

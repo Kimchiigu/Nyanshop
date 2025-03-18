@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.provider.ContactsContract.Data
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.nyanshop.database.DatabaseHelper
 import com.example.nyanshop.databinding.ActivityMapBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -29,6 +31,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var currLocation: Location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var db: DatabaseHelper
 
     // UI elements
     private lateinit var tvShopName: TextView
@@ -40,12 +43,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     // Data from intent
     private var itemName: String = ""
     private var itemPrice: String = ""
-    private var itemId: Int = -1
+    private var petId: Int = -1
+    private var storeId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        db = DatabaseHelper(this)
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -59,11 +64,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         // Get data from intent
         itemName = intent.getStringExtra("ITEM_NAME") ?: "Unknown Pet"
         itemPrice = intent.getStringExtra("ITEM_PRICE") ?: "$0"
-        itemId = intent.getIntExtra("ITEM_ID", -1)
+        petId = intent.getIntExtra("PET_ID", -1)
+        storeId = intent.getStringExtra("STORE_ID") ?: "Unknown Store"
 
         // Set data to UI
         tvItemName.text = itemName
-        tvPrice.text = itemPrice
+        tvPrice.text = "$$itemPrice"
+        tvShopName.text = "Store ID: $storeId"
 
         // Set up confirm button
         btnConfirm.setOnClickListener {
@@ -97,7 +104,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 currLocation = location
 
                 // Update location text with coordinates
-                tvLocation.text = "Lat: ${location.latitude.toFloat()}, Long: ${location.longitude.toFloat()}"
+                tvLocation.text = "Lat: ${location.latitude}, Long: ${location.longitude}"
             } else {
                 Log.d("MAP_ERROR", "location null")
                 // Fake location (BINUS University)
@@ -140,10 +147,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         // Add marker with shop name and item being purchased
         map.addMarker(MarkerOptions()
             .position(location)
-            .title("Nyanshop Pet Store")
+            .title("Nyanshop Pet Store - Store ID: $storeId")
             .snippet("Pick up your $itemName here!"))
 
         map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 }
-
