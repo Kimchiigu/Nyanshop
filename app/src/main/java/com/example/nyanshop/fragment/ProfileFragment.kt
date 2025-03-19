@@ -26,27 +26,22 @@ class ProfileFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        // Initialize views
         tvProfileName = view.findViewById(R.id.tv_profile_name)
         tvProfileEmail = view.findViewById(R.id.tv_profile_email)
         btnLogout = view.findViewById(R.id.btn_logout)
 
-        // Get stored user session
-        val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
-        val username = sharedPref.getString("username", "User")
-        val email = sharedPref.getString("email", "user@example.com")
+        // Get arguments passed from HomeActivity
+        val username = arguments?.getString("username", "User") ?: "User"
+        val email = arguments?.getString("email", "user@example.com") ?: "user@example.com"
 
-        // Display user info
         tvProfileName.text = username
         tvProfileEmail.text = email
 
-        // Navigate to SMS Activity when "Chat Customer Service" is clicked
         view.findViewById<View>(R.id.layout_settings).setOnClickListener {
             val intent = Intent(requireContext(), SmsActivity::class.java)
             startActivity(intent)
         }
 
-        // Logout button
         btnLogout.setOnClickListener {
             logoutUser()
         }
@@ -55,14 +50,13 @@ class ProfileFragment : Fragment() {
     }
 
     private fun logoutUser() {
-        // Clear stored user session
         val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         sharedPref.edit().clear().apply()
 
-        // Redirect to login screen
         Toast.makeText(requireContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show()
         val intent = Intent(requireContext(), MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
 }
+

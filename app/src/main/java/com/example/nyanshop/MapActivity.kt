@@ -33,59 +33,68 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var db: DatabaseHelper
 
-    // UI elements
     private lateinit var tvShopName: TextView
     private lateinit var tvLocation: TextView
     private lateinit var tvItemName: TextView
     private lateinit var tvPrice: TextView
     private lateinit var btnConfirm: Button
 
-    // Data from intent
     private var itemName: String = ""
     private var itemPrice: String = ""
     private var petId: Int = -1
     private var storeId: String = ""
+    private var storeName: String = "Unknown Store"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        db = DatabaseHelper(this)
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        db = DatabaseHelper(this)
 
-        // Initialize UI elements
         tvShopName = findViewById(R.id.tv_shop_name)
         tvLocation = findViewById(R.id.tv_location)
         tvItemName = findViewById(R.id.tv_item_name)
         tvPrice = findViewById(R.id.tv_price)
         btnConfirm = findViewById(R.id.btn_confirm)
 
-        // Get data from intent
         itemName = intent.getStringExtra("ITEM_NAME") ?: "Unknown Pet"
         itemPrice = intent.getStringExtra("ITEM_PRICE") ?: "$0"
         petId = intent.getIntExtra("PET_ID", -1)
         storeId = intent.getStringExtra("STORE_ID") ?: "Unknown Store"
+        storeName = intent.getStringExtra("STORE_NAME") ?: "Unknown Store"
 
-        // Set data to UI
         tvItemName.text = itemName
         tvPrice.text = "$$itemPrice"
-        tvShopName.text = "Store ID: $storeId"
+        tvShopName.text = storeName
 
-        // Set up confirm button
         btnConfirm.setOnClickListener {
-            // In a real app, you would make an API call to purchase the pet
-            Toast.makeText(this, "Purchase confirmed! Enjoy your new pet!", Toast.LENGTH_SHORT).show()
+            val sharedPref = getSharedPreferences("UserSession", MODE_PRIVATE)
+            val userEmail = sharedPref.getString("email", null)
 
-            // Create intent to go back to HomeActivity
+            if (userEmail != null) {
+                val isUpdated = db.updateUserPet(userEmail, petId)
+
+                if (isUpdated) {
+                    Toast.makeText(this, "Purchase confirmed! Enjoy your new pet!", Toast.LENGTH_SHORT).show()
+
+                    with(sharedPref.edit()) {
+                        putInt("item_id", petId)
+                        apply()
+                    }
+                } else {
+                    Toast.makeText(this, "Failed to update user!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
             val intent = Intent(this, HomeActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // Clear the back stack
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
             finish()
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-
         getCurrLocation()
     }
 
@@ -102,22 +111,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             if (location != null) {
                 Log.d("MAP_ERROR", "location not null")
                 currLocation = location
-
-                // Update location text with coordinates
                 tvLocation.text = "Lat: ${location.latitude}, Long: ${location.longitude}"
             } else {
-                Log.d("MAP_ERROR", "location null")
-                // Fake location (BINUS University)
+                Log.d("MAP_ERROR", "location null, using default location")
                 currLocation = Location("").apply {
                     longitude = 106.78113
                     latitude = -6.20201
                 }
-
-                // Set default location text
                 tvLocation.text = "BINUS University, Jakarta"
             }
 
-            // Load map **only after** we get the location
             mapFragment = supportFragmentManager.findFragmentById(R.id.fragment_map) as SupportMapFragment
             mapFragment.getMapAsync(this)
         }
@@ -139,16 +142,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(p0: GoogleMap) {
         map = p0
-
         Log.d("MAP_ERROR", "ON MAP READY")
+
         val location = LatLng(currLocation.latitude, currLocation.longitude)
         val cameraPosition = CameraPosition.builder().target(location).zoom(15.0F).tilt(20.0F).build()
 
-        // Add marker with shop name and item being purchased
-        map.addMarker(MarkerOptions()
-            .position(location)
-            .title("Nyanshop Pet Store - Store ID: $storeId")
-            .snippet("Pick up your $itemName here!"))
+        map.addMarker(
+            MarkerOptions()
+                .position(location)
+                .title("Nyanshop Pet Store - $storeName")
+                .snippet("Pick up your $itemName here!")
+        )
 
         map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }

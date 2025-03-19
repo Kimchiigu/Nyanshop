@@ -4,21 +4,13 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.nyanshop.model.Item
+import android.util.Log
 import com.example.nyanshop.model.Pet
 import com.example.nyanshop.model.Store
 import com.example.nyanshop.model.User
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db", null, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
-        val createItemTableQuery = """
-            CREATE TABLE IF NOT EXISTS item (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                description TEXT NOT NULL
-            )
-        """.trimIndent()
-
         val createUserTableQuery = """
             CREATE TABLE IF NOT EXISTS user (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,17 +44,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
             )
         """.trimIndent()
 
-        db?.execSQL(createItemTableQuery)
         db?.execSQL(createUserTableQuery)
         db?.execSQL(createStoreTableQuery)
         db?.execSQL(createPetTableQuery)
-
-        insertDefaultStores(db)
-    }
-
-    private fun insertDefaultStores(db: SQLiteDatabase?) {
-        db?.execSQL("INSERT INTO store (store_id, store_name, store_location) VALUES ('S001', 'Nyanshop Central', 'Jakarta')")
-        db?.execSQL("INSERT INTO store (store_id, store_name, store_location) VALUES ('S002', 'Nyanshop West', 'Bandung')")
+        db?.execSQL("INSERT INTO store (store_id, store_name, store_location) VALUES ('ST001', 'Nyanshop Central', 'Jakarta')")
+        db?.execSQL("INSERT INTO store (store_id, store_name, store_location) VALUES ('ST002', 'Nyanshop West', 'Bandung')")
     }
 
     fun insertStore(store: Store): Boolean {
@@ -79,7 +65,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
 
     fun getStore(storeId: String): Store? {
         val db = readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM store WHERE storeId = ?", arrayOf(storeId))
+        val cursor = db.rawQuery("SELECT * FROM store WHERE store_id = ?", arrayOf(storeId))
+
+        if (cursor.count == 0) {
+            Log.e("DB_ERROR", "Store with ID $storeId not found.")
+        }
 
         var store: Store? = null
         if (cursor.moveToFirst()) {
@@ -90,10 +80,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
             )
         }
 
+        Log.i("STORE_FOUND", "Store with ID $storeId is found.")
+
         cursor.close()
         db.close()
         return store
     }
+
 
     fun getStores(): List<Store> {
         val stores = mutableListOf<Store>()
@@ -188,32 +181,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
         db.close()
     }
 
-    fun getItems() : List<Item> {
-        val items = arrayListOf<Item>()
-
-        val db = readableDatabase
-        val query = "SELECT * FROM item"
-
-        val cursor = db.rawQuery(query, null)
-        cursor.moveToFirst()
-
-        if (cursor.count > 0) {
-            do {
-                val item = Item(
-                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("name")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("description"))
-                )
-
-                items.add(item)
-            } while(cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return items
-    }
-
     fun getUsers(): List<User> {
         val users = mutableListOf<User>()
         val db = readableDatabase
@@ -285,36 +252,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
         return user
     }
 
-    fun insertItem(item: Item) {
+    fun updateUserPet(email: String, petId: Int): Boolean {
         val db = writableDatabase
         val values = ContentValues().apply {
-            put("name", item.name)
-            put("description", item.description)
+            put("item_id", petId)
         }
-        db.insert("item", null, values)
-        db.close()
-    }
 
-    fun updateItem(item: Item) {
-        val db = writableDatabase
-        val values = ContentValues().apply {
-            put("name", item.name)
-            put("description", item.description)
-        }
-        db.update("item", values, "id = ?", arrayOf(item.id.toString()))
+        val result = db.update("user", values, "email = ?", arrayOf(email))
         db.close()
-    }
 
-    fun deleteItem(id: String) {
-        val db = writableDatabase
-        db.delete("item", "id = ?", arrayOf(id))
-        db.close()
-    }
-
-    fun deleteAllItem() {
-        val db = writableDatabase
-        db.delete("item", null, null)
-        db.close()
+        return result > 0
     }
 
     fun insertUser(user: User): Boolean {

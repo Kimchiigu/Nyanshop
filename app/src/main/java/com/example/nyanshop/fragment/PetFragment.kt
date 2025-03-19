@@ -46,39 +46,18 @@ class PetFragment : Fragment() {
     }
 
     private fun fetchData() {
-        val url = "https://api.npoint.io/54d1f95bddbcb0670225"
-        val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
-            try {
-                databaseHelper.deleteAllPets()
-                val petArray = response.getJSONArray("pets")
-                val petsList = mutableListOf<Pet>()
+        Log.i("TEST_MODE", "Using hardcoded test data instead of API")
 
-                for (i in 0 until petArray.length()) {
-                    val petObject = petArray.getJSONObject(i)
-                    val pet = Pet(
-                        0,
-                        petObject.getString("name"),
-                        petObject.getString("type"),
-                        petObject.getInt("age"),
-                        petObject.getInt("price"),
-                        petObject.getString("storeId")
-                    )
-                    databaseHelper.insertPet(pet)
-                    petsList.add(pet)
-                }
+        val testData = listOf(
+            Pet(0, "Siamoy", "Siamese", 2, 500, "ST001"),
+            Pet(1, "Percy", "Persian", 3, 300, "ST002"),
+            Pet(2, "MainKun", "Maine Coon", 4, 400, "ST002"),
+            Pet(3, "Begal", "Bengal", 1, 600, "ST001"),
+            Pet(4, "Sphyky", "Sphynx", 5, 700, "ST001")
+        )
 
-                setUpRecycler(petsList)
-
-            } catch (e: JSONException) {
-                Toast.makeText(context, "Error parsing data: ${e.message}", Toast.LENGTH_SHORT).show()
-                Log.e("JSONError", "Error: ${e.message}")
-            }
-        }, { error ->
-            Log.e("VolleyError", "Error fetching data: ${error.message}")
-            Toast.makeText(context, "Failed to fetch data", Toast.LENGTH_SHORT).show()
-        })
-
-        requestQueue.add(request)
+        Log.i("TEST_DATA", "Hardcoded Pet List: $testData")
+        setUpRecycler(testData)
     }
 
     private fun setUpRecycler(pets: List<Pet>) {

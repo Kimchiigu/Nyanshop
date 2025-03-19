@@ -1,5 +1,6 @@
 package com.example.nyanshop
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var tabLayout: TabLayout
     private lateinit var tvHello: TextView
     private lateinit var db: DatabaseHelper
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,21 +28,25 @@ class HomeActivity : AppCompatActivity() {
 
         db = DatabaseHelper(this)
 
-        val email = intent.getStringExtra("email")
+        val sharedPref = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val storedEmail = sharedPref.getString("email", null)
+
+        val email = intent.getStringExtra("email") ?: storedEmail
 
         if (email != null) {
-            val user: User? = db.getUserByEmail(email)
+            user = db.getUserByEmail(email)
+            tvHello.text = user?.name ?: "Guest"
 
-            if (user != null) {
-                tvHello.text = user.name
-            } else {
-                tvHello.text = "Guest"
+            with(sharedPref.edit()) {
+                putString("email", user?.email)
+                putString("username", user?.name)
+                apply()
             }
         } else {
             tvHello.text = "Guest"
         }
 
-        val adapter = TabHomeVPAdapter(this)
+        val adapter = TabHomeVPAdapter(this, user)
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
