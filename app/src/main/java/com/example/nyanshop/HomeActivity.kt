@@ -40,6 +40,7 @@ class HomeActivity : AppCompatActivity() {
             with(sharedPref.edit()) {
                 putString("email", user?.email)
                 putString("username", user?.name)
+                putInt("item_id", user?.item_id ?: -1)
                 apply()
             }
         } else {

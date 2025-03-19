@@ -77,13 +77,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:text="My Cart"
+                android:text="My Cat"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </RelativeLayout>
 
+        <!-- No Pet -->
         <LinearLayout
+            android:id="@+id/layout_no_pet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -123,6 +125,46 @@
                 android:backgroundTint="@color/teal_200"
                 android:textColor="@color/white"
                 android:paddingHorizontal="24dp"/>
+
+        </LinearLayout>
+
+        <!-- Pet Info Section (Initially Hidden) -->
+        <LinearLayout
+            android:id="@+id/layout_pet_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@drawable/rounded_background"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_pet"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_pet"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_pet_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pet Name"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_pet_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pet Description"
+                android:textSize="14sp"
+                android:textColor="@color/gray"
+                android:textAlignment="center"
+                android:layout_marginBottom="16dp"/>
 
         </LinearLayout>
 

@@ -145,6 +145,34 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
         return pets
     }
 
+    fun getPetById(petId: Int): Pet? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM pet WHERE pet_id = ?", arrayOf(petId.toString()))
+
+        if (cursor.count == 0) {
+            Log.e("DB_ERROR", "Pet with ID $petId not found.")
+        }
+
+        var pet: Pet? = null
+        if (cursor.moveToFirst()) {
+            pet = Pet(
+                cursor.getInt(cursor.getColumnIndexOrThrow("petId")),
+                cursor.getString(cursor.getColumnIndexOrThrow("petName")),
+                cursor.getString(cursor.getColumnIndexOrThrow("petType")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("petAge")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("petPrice")),
+                cursor.getString(cursor.getColumnIndexOrThrow("storeId")),
+            )
+        }
+
+        Log.i("PET_FOUND", "Pet with ID $petId is found.")
+
+        cursor.close()
+        db.close()
+        Log.i("PET_DB", "Returning Pet: $pet")
+        return pet
+    }
+
     fun getPetsByStore(storeId: String): List<Pet> {
         val pets = mutableListOf<Pet>()
         val db = readableDatabase
