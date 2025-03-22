@@ -91,7 +91,7 @@ Nyanshop is an e-commerce platform designed to offer a wide variety of products 
 - Buy Pet from Shop
 
   <p align="center">
-    <img src = "https://res.cloudinary.com/dxcn5osfu/image/upload/f_auto,q_auto/v1/Nyanshop/buy_pet" width=300>
+    <img src = "./assets/mockups/gif/buy_cat.gif" width=300>
   </p>
 
 - Edit Profile
