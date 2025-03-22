@@ -24,15 +24,17 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
             )
         """.trimIndent()
 
-        val createStoreTableQuery = """
+            val createStoreTableQuery = """
             CREATE TABLE IF NOT EXISTS store (
                 store_id TEXT PRIMARY KEY,
                 store_name TEXT NOT NULL,
-                store_location TEXT NOT NULL
+                store_location TEXT NOT NULL,
+                latitude REAL NOT NULL,  -- Added latitude column
+                longitude REAL NOT NULL  -- Added longitude column
             )
         """.trimIndent()
 
-        val createPetTableQuery = """
+            val createPetTableQuery = """
             CREATE TABLE IF NOT EXISTS pet (
                 pet_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pet_name TEXT NOT NULL,
@@ -47,8 +49,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
         db?.execSQL(createUserTableQuery)
         db?.execSQL(createStoreTableQuery)
         db?.execSQL(createPetTableQuery)
-        db?.execSQL("INSERT INTO store (store_id, store_name, store_location) VALUES ('ST001', 'Nyanshop Central', 'Jakarta')")
-        db?.execSQL("INSERT INTO store (store_id, store_name, store_location) VALUES ('ST002', 'Nyanshop West', 'Bandung')")
     }
 
     fun insertStore(store: Store): Boolean {
@@ -57,6 +57,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
             put("store_id", store.storeId)
             put("store_name", store.storeName)
             put("store_location", store.storeLocation)
+            put("latitude", store.latitude)  // Insert latitude
+            put("longitude", store.longitude)  // Insert longitude
         }
         val result = db.insert("store", null, values)
         db.close()
@@ -76,19 +78,19 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
             store = Store(
                 cursor.getString(cursor.getColumnIndexOrThrow("store_id")),
                 cursor.getString(cursor.getColumnIndexOrThrow("store_name")),
-                cursor.getString(cursor.getColumnIndexOrThrow("store_location"))
+                cursor.getString(cursor.getColumnIndexOrThrow("store_location")),
+                cursor.getDouble(cursor.getColumnIndexOrThrow("latitude")),  // Fetch latitude
+                cursor.getDouble(cursor.getColumnIndexOrThrow("longitude"))  // Fetch longitude
             )
         }
 
         Log.i("STORE_FOUND", "Store with ID $storeId is found.")
-
         cursor.close()
         db.close()
         return store
     }
 
-
-    fun getStores(): List<Store> {
+    fun getAllStores(): List<Store> {
         val stores = mutableListOf<Store>()
         val db = readableDatabase
         val cursor = db.rawQuery("SELECT * FROM store", null)
@@ -98,7 +100,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
                 Store(
                     cursor.getString(cursor.getColumnIndexOrThrow("store_id")),
                     cursor.getString(cursor.getColumnIndexOrThrow("store_name")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("store_location"))
+                    cursor.getString(cursor.getColumnIndexOrThrow("store_location")),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow("latitude")),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow("longitude"))
                 )
             )
         }
@@ -156,12 +160,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
         var pet: Pet? = null
         if (cursor.moveToFirst()) {
             pet = Pet(
-                cursor.getInt(cursor.getColumnIndexOrThrow("petId")),
-                cursor.getString(cursor.getColumnIndexOrThrow("petName")),
-                cursor.getString(cursor.getColumnIndexOrThrow("petType")),
-                cursor.getInt(cursor.getColumnIndexOrThrow("petAge")),
-                cursor.getInt(cursor.getColumnIndexOrThrow("petPrice")),
-                cursor.getString(cursor.getColumnIndexOrThrow("storeId")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("pet_id")),
+                cursor.getString(cursor.getColumnIndexOrThrow("pet_name")),
+                cursor.getString(cursor.getColumnIndexOrThrow("pet_type")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("pet_age")),
+                cursor.getInt(cursor.getColumnIndexOrThrow("pet_price")),
+                cursor.getString(cursor.getColumnIndexOrThrow("store_id"))
             )
         }
 
@@ -286,6 +290,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
             put("item_id", petId)
         }
 
+        Log.i("USER_INFO", "Updating $email with $petId")
         val result = db.update("user", values, "email = ?", arrayOf(email))
         db.close()
 

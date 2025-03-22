@@ -140,12 +140,12 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Confirm Purchase"
-                android:backgroundTint="@color/teal_200"
+                android:background="@drawable/blue_gradient_button"
                 android:textColor="@color/white"
                 android:padding="12dp" />
 

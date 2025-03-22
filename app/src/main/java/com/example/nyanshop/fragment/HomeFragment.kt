@@ -17,6 +17,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private var pet: Pet? = null
     private lateinit var db: DatabaseHelper
+    private lateinit var petList: List<Pet>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +32,11 @@ class HomeFragment : Fragment() {
         val userName = sharedPref.getString("username", "Guest")
         val itemId = sharedPref.getInt("item_id", -1)
 
+        Log.i("USER_INFO", "User's ItemID: $itemId")
+        Log.i("USER_INFO", "Current User: $userName")
         pet = db.getPetById(itemId)
+        petList = db.getPets()
+        Log.i("PET_INFO", "Pet List: $petList")
 
         Log.i("PET_INFO", "Pet Data : $pet")
 

@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pet Name"
-                android:textColor="@color/black"
+                android:textColor="@color/teal_700"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pet Type"
-                android:textColor="@color/gray"
+                android:textColor="@color/teal_700"
                 android:textSize="14sp"/>
 
             <TextView
@@ -47,18 +47,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$999"
-                android:textColor="@color/teal_200"
+                android:textColor="@color/teal_700"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"/>
         </LinearLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_buy_pet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Buy"
-            android:backgroundTint="@color/teal_200"
+            android:background="@drawable/blue_gradient_button"
             android:textColor="@color/white"/>
     </LinearLayout>
 
