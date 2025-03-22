@@ -157,7 +157,7 @@ Follow these steps to set up and run the project locally on your Android device 
 
 - Android Studio will automatically detect the dependencies from the `build.gradle` files and prompt you to sync the project. Click **Sync Now** to install required libraries.
 
-### 4. Configure Google Maps API and Twilio
+### 4. Configure Google Maps API
 
 - **Google Maps API**: Add your Google Maps API key in the `local.properties`:
 
