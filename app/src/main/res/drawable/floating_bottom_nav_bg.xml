@@ -4,6 +4,10 @@
         android:startColor="#00EB98"
         android:endColor="#28D7FA"
         android:angle="45"/>
-    <corners android:radius="24dp" />
+    <corners
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="0dp"
+        android:topLeftRadius="16dp"
+        android:topRightRadius="16dp" />
     <padding android:left="8dp" android:right="8dp" android:top="8dp" android:bottom="8dp" />
 </shape>

@@ -71,7 +71,7 @@ class SmsActivity : AppCompatActivity() {
         val welcomeMessage = Message(
             "Hello! Welcome to Nyanshop Customer Service. How can I help you today?",
             getCurrentTime(),
-            false // Received message (from customer service)
+            false
         )
         messages.add(welcomeMessage)
         messageAdapter.notifyItemInserted(messages.size - 1)

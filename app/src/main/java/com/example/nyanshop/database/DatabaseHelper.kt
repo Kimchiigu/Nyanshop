@@ -29,8 +29,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
                 store_id TEXT PRIMARY KEY,
                 store_name TEXT NOT NULL,
                 store_location TEXT NOT NULL,
-                latitude REAL NOT NULL,  -- Added latitude column
-                longitude REAL NOT NULL  -- Added longitude column
+                latitude REAL NOT NULL,
+                longitude REAL NOT NULL
             )
         """.trimIndent()
 
@@ -57,8 +57,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
             put("store_id", store.storeId)
             put("store_name", store.storeName)
             put("store_location", store.storeLocation)
-            put("latitude", store.latitude)  // Insert latitude
-            put("longitude", store.longitude)  // Insert longitude
+            put("latitude", store.latitude)
+            put("longitude", store.longitude)
         }
         val result = db.insert("store", null, values)
         db.close()
@@ -79,8 +79,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
                 cursor.getString(cursor.getColumnIndexOrThrow("store_id")),
                 cursor.getString(cursor.getColumnIndexOrThrow("store_name")),
                 cursor.getString(cursor.getColumnIndexOrThrow("store_location")),
-                cursor.getDouble(cursor.getColumnIndexOrThrow("latitude")),  // Fetch latitude
-                cursor.getDouble(cursor.getColumnIndexOrThrow("longitude"))  // Fetch longitude
+                cursor.getDouble(cursor.getColumnIndexOrThrow("latitude")),
+                cursor.getDouble(cursor.getColumnIndexOrThrow("longitude"))
             )
         }
 
@@ -317,11 +317,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "nyanshop.db"
         val db = writableDatabase
         val values = ContentValues().apply {
             put("name", user.name)
-            put("email", user.email)
             put("password", user.password)
-            put("gender", user.gender)
-            put("isAdmin", if (user.isAdmin) 1 else 0)
-            put("item_id", user.item_id)
         }
         db.update("user", values, "id = ?", arrayOf(user.id.toString()))
         db.close()

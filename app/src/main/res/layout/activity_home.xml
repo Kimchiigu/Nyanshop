@@ -88,7 +88,7 @@
         android:background="@drawable/floating_bottom_nav_bg"
         android:gravity="center"
         android:paddingVertical="8dp"
-        android:text="© 2023 @ Nyanshop"
+        android:text="© 2025 - CG24-2 - Nyanshop"
         android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />

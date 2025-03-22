@@ -121,10 +121,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 tvLocation.text = "BINUS University, Jakarta"
             }
 
-            // Fetch the store's latitude and longitude from the database
             val store = db.getStore(storeId)
             store?.let {
-                val storeLocation = LatLng(it.latitude, it.longitude) // Use latitude and longitude from database
+                val storeLocation = LatLng(it.latitude, it.longitude)
                 tvLocation.text = store.storeLocation
                 mapFragment = supportFragmentManager.findFragmentById(R.id.fragment_map) as SupportMapFragment
                 mapFragment.getMapAsync(this)
@@ -150,10 +149,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         map = p0
         Log.d("MAP_ERROR", "ON MAP READY")
 
-        // Use the store's latitude and longitude for the marker
         val store = db.getStore(storeId)
         store?.let {
-            val location = LatLng(it.latitude, it.longitude)  // Fetch latitude and longitude from the store
+            val location = LatLng(it.latitude, it.longitude)
             val cameraPosition = CameraPosition.builder().target(location).zoom(15.0F).tilt(20.0F).build()
 
             map.addMarker(
