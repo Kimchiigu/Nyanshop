@@ -38,11 +38,12 @@ class HomeActivity : AppCompatActivity() {
 
         if (email != null) {
             user = db.getUserByEmail(email)
-            tvHello.text = user?.name ?: "Guest"
+            val updatedName = sharedPref.getString("username", user?.name)
+            tvHello.text = updatedName ?: "Guest"
 
             with(sharedPref.edit()) {
                 putString("email", user?.email)
-                putString("username", user?.name)
+                putString("username", updatedName)
                 putInt("item_id", user?.item_id ?: -1)
                 apply()
             }

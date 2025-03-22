@@ -16,6 +16,8 @@ import com.example.nyanshop.database.DatabaseHelper
 import com.example.nyanshop.model.User
 import com.example.nyanshop.MainActivity
 import android.app.AlertDialog
+import android.widget.LinearLayout
+import com.example.nyanshop.SmsActivity
 
 class ProfileFragment : Fragment() {
     private lateinit var tvProfileName: TextView
@@ -37,7 +39,6 @@ class ProfileFragment : Fragment() {
 
         db = DatabaseHelper(requireContext())
 
-        // Get current user from shared preferences
         val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val email = sharedPref.getString("email", null)
 
@@ -47,9 +48,13 @@ class ProfileFragment : Fragment() {
             tvProfileEmail.text = currentUser?.email ?: "user@example.com"
         }
 
-        // Open the edit profile modal when the user clicks the "Edit Profile" button
         view.findViewById<View>(R.id.layout_edit_profile).setOnClickListener {
             showEditProfileDialog()
+        }
+
+        view.findViewById<LinearLayout>(R.id.layout_settings).setOnClickListener {
+            val intent = Intent(requireContext(), SmsActivity::class.java)
+            startActivity(intent)
         }
 
         btnLogout.setOnClickListener {
@@ -60,43 +65,38 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showEditProfileDialog() {
-        // Inflate the dialog view
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.profile_edit_dialog, null)
         val etName = dialogView.findViewById<EditText>(R.id.et_edit_name)
         val etPassword = dialogView.findViewById<EditText>(R.id.et_edit_password)
         val btnSave = dialogView.findViewById<Button>(R.id.btn_save_changes)
         val btnCancel = dialogView.findViewById<Button>(R.id.btn_cancel)
 
-        // Set current user details in the dialog
         etName.setText(currentUser?.name)
         etPassword.setText(currentUser?.password)
 
-        // Set up the alert dialog
         val builder = AlertDialog.Builder(requireContext())
             .setView(dialogView)
 
         val dialog = builder.create()
         dialog.window?.setBackgroundDrawableResource(R.drawable.dialog_background)
 
-        // Handle Save button click
         btnSave.setOnClickListener {
             val newName = etName.text.toString()
             val newPassword = etPassword.text.toString()
 
-            // Ensure that both fields are filled out
             if (newName.isNotEmpty() && newPassword.isNotEmpty()) {
-                // Update the user's name and password in the database
                 currentUser?.apply {
                     name = newName
                     password = newPassword
                 }
 
-                // Update the database
                 db.updateUser(currentUser!!)
 
-                // Update the UI with the new details
                 tvProfileName.text = newName
                 tvProfileEmail.text = currentUser?.email
+
+                val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                sharedPref.edit().putString("username", newName).apply()
 
                 Toast.makeText(requireContext(), "Profile updated successfully!", Toast.LENGTH_SHORT).show()
 
@@ -106,17 +106,14 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        // Handle Cancel button click
         btnCancel.setOnClickListener {
-            dialog.dismiss()  // Simply dismiss the dialog
+            dialog.dismiss()
         }
 
-        // Show the dialog
         dialog.show()
     }
 
     private fun logoutUser() {
-        // Clear the user's session and log out
         val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         sharedPref.edit().clear().apply()
 
