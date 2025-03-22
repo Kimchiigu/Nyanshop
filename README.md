@@ -11,7 +11,7 @@
 
 # Mobile App w/Kotlin: Nyanshop 😺🛒
 
-This repository contains the AI Project Class of BINUS University with the Project Title "Nyanshop" 🐱🛍️
+This repository contains the Mobile Programming with Kotlin Project Title "Nyanshop" 🐱🛍️
 
 ## Table of Contents
 
@@ -180,3 +180,5 @@ Follow these steps to set up and run the project locally on your Android device 
 - Test features like product browsing, cart, and SMS notifications.
 
 ---
+
+Lovely made by me! CG24-2
