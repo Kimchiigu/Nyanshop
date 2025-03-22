@@ -111,7 +111,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             if (location != null) {
                 Log.d("MAP_ERROR", "location not null")
                 currLocation = location
-                tvLocation.text = "Lat: ${location.latitude}, Long: ${location.longitude}"
+                tvLocation.text = "Unknown"
             } else {
                 Log.d("MAP_ERROR", "location null, using default location")
                 currLocation = Location("").apply {
@@ -121,8 +121,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 tvLocation.text = "BINUS University, Jakarta"
             }
 
-            mapFragment = supportFragmentManager.findFragmentById(R.id.fragment_map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
+            // Fetch the store's latitude and longitude from the database
+            val store = db.getStore(storeId)
+            store?.let {
+                val storeLocation = LatLng(it.latitude, it.longitude) // Use latitude and longitude from database
+                tvLocation.text = store.storeLocation
+                mapFragment = supportFragmentManager.findFragmentById(R.id.fragment_map) as SupportMapFragment
+                mapFragment.getMapAsync(this)
+            }
         }
     }
 
@@ -144,16 +150,21 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         map = p0
         Log.d("MAP_ERROR", "ON MAP READY")
 
-        val location = LatLng(currLocation.latitude, currLocation.longitude)
-        val cameraPosition = CameraPosition.builder().target(location).zoom(15.0F).tilt(20.0F).build()
+        // Use the store's latitude and longitude for the marker
+        val store = db.getStore(storeId)
+        store?.let {
+            val location = LatLng(it.latitude, it.longitude)  // Fetch latitude and longitude from the store
+            val cameraPosition = CameraPosition.builder().target(location).zoom(15.0F).tilt(20.0F).build()
 
-        map.addMarker(
-            MarkerOptions()
-                .position(location)
-                .title("Nyanshop Pet Store - $storeName")
-                .snippet("Pick up your $itemName here!")
-        )
+            map.addMarker(
+                MarkerOptions()
+                    .position(location)
+                    .title("Nyanshop Pet Store - $storeName")
+                    .snippet("Pick up your $itemName here!")
+            )
 
-        map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        }
     }
 }
+
